@@ -3,11 +3,11 @@ const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
 
-// Import routes
 const authRoutes = require("./routes/auth.routes");
+const toursRoutes = require("./routes/tours.routes");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
@@ -18,14 +18,12 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/register/register.html"));
 });
-
 app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/register/register.html"));
 });
 
-app.post("/api/register", authRoutes.register);
-app.post("/api/login", authRoutes.login);
-
+app.use("/api", authRoutes);
+app.use("/api", toursRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
