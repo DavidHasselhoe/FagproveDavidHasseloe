@@ -37,3 +37,46 @@ exports.getMyTours = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch tours" });
   }
 };
+
+//---Update Tour Route---\\
+exports.updateTour = async (req, res) => {
+  const { id } = req.params;
+  const { date, location, description } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const result = await db.query(
+      "SELECT * FROM tours WHERE id = $1 AND user_id = $2",
+      [id, userId]
+    );
+    if (result.rows.length === 0)
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to update this tour" });
+
+    await db.query(
+      "UPDATE tours SET date = $1, location = $2, description = $3 WHERE id = $4",
+      [date, location, description, id]
+    );
+    res.json({ message: "Tour updated" });
+  } catch (err) {
+    console.error("Error updating tour:", err);
+    res.status(500).json({ error: "Failed to update tour" });
+  }
+};
+
+//---Delete Tour Route---\\
+exports.deleteTour = async (req, res) => {
+  const userId = req.user.id; 
+  const tourId = req.params.id;
+  try {
+    const { rowCount } = await db.query(
+      "DELETE FROM tours WHERE id = $1 AND user_id = $2",
+      [tourId, userId]
+    );
+    if (rowCount === 0) return res.status(404).json({ error: "Not found" });
+    res.json({ message: "Tour deleted" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete tour" });
+  }
+};
