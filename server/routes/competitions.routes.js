@@ -6,5 +6,9 @@ const authMiddleware = require("../middleware/auth.middleware");
 
 router.get("/", authMiddleware, competitionsController.getCompetitions);
 router.post("/", authMiddleware, competitionsController.createCompetition);
+router.put("/:id", authMiddleware, competitionsController.updateCompetition);
+router.delete("/:id", authMiddleware, competitionsController.deleteCompetition);
+
+
 
 module.exports = router;

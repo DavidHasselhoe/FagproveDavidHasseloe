@@ -1,3 +1,8 @@
+/*
+Har brukt denne logikken i en tidligere oppgave der jeg skulle lage en blog applikasjon,
+der man kunne opprette, oppdatere og slette innlegg. Så jeg har tatt utgangspunkt i den koden.
+*/
+
 const db = require("../database");
 
 // --- Get all competitions --- //
@@ -19,7 +24,6 @@ exports.createCompetition = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    // Check if user exists and is admin
     const { rows: users } = await db.query(
       "SELECT is_admin FROM users WHERE id = $1",
       [userId]
@@ -30,7 +34,6 @@ exports.createCompetition = async (req, res) => {
         .status(403)
         .json({ error: "Only administrators can create competitions" });
 
-    // Allow only one competition at a time
     const { rows: countRows } = await db.query(
       "SELECT COUNT(*)::int AS count FROM competitions"
     );
@@ -39,7 +42,7 @@ exports.createCompetition = async (req, res) => {
         error: "A competition already exists. Only one at a time is allowed.",
       });
 
-    // Create the competition
+    // Create the competition (admin only)
     const { rows: created } = await db.query(
       `INSERT INTO competitions (name, description, start_date, end_date, prize)
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
@@ -49,5 +52,62 @@ exports.createCompetition = async (req, res) => {
   } catch (err) {
     console.error("Error creating competition:", err);
     res.status(500).json({ error: "Failed to create competition" });
+  }
+};
+
+// --- Update a competition (admin only) --- //
+exports.updateCompetition = async (req, res) => {
+  const { id } = req.params;
+  const { name, description, start_date, end_date, prize } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const { rows: users } = await db.query(
+      "SELECT is_admin FROM users WHERE id = $1",
+      [userId]
+    );
+    if (!users.length) return res.status(404).json({ error: "User not found" });
+    if (!users[0].is_admin)
+      return res.status(403).json({ error: "Only administrators can update competitions" });
+
+    const { rowCount } = await db.query(
+      `UPDATE competitions
+       SET name = $1, description = $2, start_date = $3, end_date = $4, prize = $5
+       WHERE id = $6`,
+      [name, description, start_date, end_date, prize, id]
+    );
+    if (rowCount === 0) return res.status(404).json({ error: "Competition not found" });
+
+    res.json({ message: "Competition updated successfully" });
+  } catch (err) {
+    console.error("Error updating competition:", err);
+    res.status(500).json({ error: "Failed to update competition" });
+  }
+};
+
+// --- Delete a competition (admin only) --- //
+exports.deleteCompetition = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const { rows: users } = await db.query(
+      "SELECT is_admin FROM users WHERE id = $1",
+      [userId]
+    );
+    if (!users.length) return res.status(404).json({ error: "User not found" });
+    if (!users[0].is_admin)
+      return res.status(403).json({ error: "Only administrators can delete competitions" });
+
+    const { rowCount } = await db.query(
+      "DELETE FROM competitions WHERE id = $1",
+      [id]
+    );
+    if (rowCount === 0) return res.status(404).json({ error: "Competition not found" });
+
+    res.json({ message: "Competition deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting competition:", err);
+    res.status(500).json({ error: "Failed to delete competition" });
   }
 };
