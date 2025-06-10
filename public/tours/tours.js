@@ -47,12 +47,44 @@ async function loadTours() {
 
 document.addEventListener("DOMContentLoaded", loadTours);
 
+//---Load active competitions for tour form---//
+async function loadActiveCompetitions() {
+  try {
+    const res = await fetch("/api/competitions");
+    const competitions = res.ok ? await res.json() : [];
+    const select = document.getElementById("competition_id");
+    select.innerHTML = ""; // Tøm
+
+    if (competitions.length === 0) {
+      select.innerHTML = `<option value="">No active competitions</option>`;
+      select.disabled = true;
+    } else {
+      select.disabled = false;
+      competitions.forEach((comp) => {
+        select.innerHTML += `<option value="${comp.id}">
+          ${comp.name} (${comp.start_date.substring(
+          0,
+          10
+        )} – ${comp.end_date.substring(0, 10)})
+        </option>`;
+      });
+    }
+  } catch (err) {
+    console.error("Failed to load competitions:", err);
+    document.getElementById(
+      "competition_id"
+    ).innerHTML = `<option value="">Error loading competitions</option>`;
+    document.getElementById("competition_id").disabled = true;
+  }
+}
+
 //---Add Tour---//
 document.getElementById("addTourBtn").onclick = () => {
   tourForm.reset();
   tourIdInput.value = "";
   document.getElementById("tourModalLabel").innerText = "Add Tour";
   document.getElementById("competitionField").style.display = "block";
+  loadActiveCompetitions();
   const modal = new bootstrap.Modal(tourModal);
   modal.show();
 };
