@@ -69,16 +69,14 @@
                 name="description"
               />
             </div>
-            <div class="mb-3" id="competitionField" style="display: none">
-              <label for="competition_id" class="form-label"
-                >Competition ID</label
-              >
-              <input
-                type="number"
-                class="form-control"
+            <div class="mb-3" id="competitionField">
+              <label for="competition_id" class="form-label">Competition</label>
+              <select
+                class="form-select"
                 id="competition_id"
                 name="competition_id"
-              />
+                required
+              ></select>
             </div>
           </div>
           <div class="modal-footer">
