@@ -18,6 +18,20 @@ exports.getCompetitions = async (req, res) => {
   }
 };
 
+//---Get all active competitions---//
+exports.getActiveCompetitions = async (req, res) => {
+  try {
+    const { rows } = await db.query(`
+      SELECT * FROM competitions
+      WHERE CURRENT_DATE BETWEEN start_date AND end_date
+      ORDER BY start_date DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch active competitions" });
+  }
+};
+
 //---Create Competition (admin only, only if none exists)---//
 exports.createCompetition = async (req, res) => {
   const { name, description, start_date, end_date, prize } = req.body;
