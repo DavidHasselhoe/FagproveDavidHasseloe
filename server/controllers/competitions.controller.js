@@ -5,7 +5,7 @@ der man kunne opprette, oppdatere og slette innlegg. Så jeg har tatt utgangspun
 
 const db = require("../database");
 
-// --- Get all competitions --- //
+//---Get all competitions---//
 exports.getCompetitions = async (req, res) => {
   try {
     const { rows } = await db.query(
@@ -18,7 +18,7 @@ exports.getCompetitions = async (req, res) => {
   }
 };
 
-// --- Create new competition (admin only, only if none exists) --- //
+//---Create Competition (admin only, only if none exists)---//
 exports.createCompetition = async (req, res) => {
   const { name, description, start_date, end_date, prize } = req.body;
   const userId = req.user.id;
@@ -42,7 +42,7 @@ exports.createCompetition = async (req, res) => {
         error: "A competition already exists. Only one at a time is allowed.",
       });
 
-    // Create the competition (admin only)
+    //---Create Competition (admin only)---//
     const { rows: created } = await db.query(
       `INSERT INTO competitions (name, description, start_date, end_date, prize)
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
@@ -55,7 +55,7 @@ exports.createCompetition = async (req, res) => {
   }
 };
 
-// --- Update a competition (admin only) --- //
+//---Update Competition (admin only)---//
 exports.updateCompetition = async (req, res) => {
   const { id } = req.params;
   const { name, description, start_date, end_date, prize } = req.body;
@@ -85,7 +85,7 @@ exports.updateCompetition = async (req, res) => {
   }
 };
 
-// --- Delete a competition (admin only) --- //
+//---Delete Competition (admin only)---//
 exports.deleteCompetition = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
