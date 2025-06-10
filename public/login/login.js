@@ -6,24 +6,22 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   try {
     const res = await fetch("/api/auth/login", {
+      // Fixed: was /api/login
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
 
     const result = await res.json();
-    document.getElementById("message").innerText =
-      result.message || result.error;
 
-    if (res.ok && result.token) {
+    if (res.ok) {
       localStorage.setItem("token", result.token);
-
-      setTimeout(() => {
-        window.location.href = "/index/index.html";
-      }, 1500);
+      window.location.href = "/";
+    } else {
+      document.getElementById("message").innerText = result.error;
     }
   } catch (err) {
-    document.getElementById("message").innerText = "Login failed";
+    document.getElementById("message").innerText = "Something went wrong";
     console.error(err);
   }
 });

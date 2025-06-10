@@ -67,7 +67,7 @@ async function loadLeaderboardForCompetition(compId) {
 
   try {
     const leaderboardData = await fetchJSON(
-      `/api/leaderboard?competition_id=${compId}`
+      `/api/leaderboard/?competition_id=${compId}`
     );
 
     if (!historyLeaderboard) return;

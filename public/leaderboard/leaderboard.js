@@ -21,7 +21,7 @@ function clearTable() {
 //---Fetch active competition ID---//
 async function fetchActiveCompetitionId() {
   try {
-    const res = await fetch("/api/competitions"); // Use existing endpoint that returns active competitions
+    const res = await fetch("/api/competitions/");
     if (!res.ok) throw new Error("Failed to fetch active competition");
     const competitions = await res.json();
     return competitions.length > 0 ? competitions[0].id : null;
@@ -34,7 +34,7 @@ async function fetchActiveCompetitionId() {
 //---Load leaderboard data---//
 async function loadLeaderboard(competitionId) {
   try {
-    let url = "/api/leaderboard";
+    let url = "/api/leaderboard/";
     if (competitionId) url += `?competition_id=${competitionId}`;
 
     const res = await fetch(url);
@@ -44,7 +44,7 @@ async function loadLeaderboard(competitionId) {
 
     if (!leaderboardTable) return;
 
-    //---Generate all rows at once for better performance---//
+    //---Generate all rows---//
     const rows = data.map(
       (user, index) =>
         `<tr>

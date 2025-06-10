@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", loadTours);
 //---Load active competitions for tour form---//
 async function loadActiveCompetitions() {
   try {
-    const res = await fetch("/api/competitions");
+    const res = await fetch("/api/competitions/");
     const competitions = res.ok ? await res.json() : [];
     const select = document.getElementById("competition_id");
     select.innerHTML = ""; // Tøm

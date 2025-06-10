@@ -7,7 +7,7 @@ document
     const data = Object.fromEntries(formData.entries());
 
     try {
-      const res = await fetch("/api/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -19,7 +19,7 @@ document
 
       if (res.ok) {
         setTimeout(() => {
-          window.location.href = "/login/login.html";
+          window.location.href = "/login";
         }, 1500);
       }
     } catch (err) {
