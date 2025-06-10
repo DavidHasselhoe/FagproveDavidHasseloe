@@ -1,6 +1,11 @@
+/*
+Har brukt denne logikken i en tidligere oppgave der jeg skulle lage en blog applikasjon,
+der man kunne opprette, oppdatere og slette innlegg. Så jeg har tatt utgangspunkt i den koden.
+*/
+
 const db = require("../database");
 
-//---Create Tour Route---\\
+//---Create Tour---//
 exports.createTour = async (req, res) => {
   const userId = req.user.id;
   const { competition_id, date, location, description } = req.body;
@@ -23,7 +28,7 @@ exports.createTour = async (req, res) => {
   }
 };
 
-//---Get My Tours Route---\\
+//---Get My Tours---//
 exports.getMyTours = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -38,7 +43,7 @@ exports.getMyTours = async (req, res) => {
   }
 };
 
-//---Update Tour Route---\\
+//---Update Tour---//
 exports.updateTour = async (req, res) => {
   const { id } = req.params;
   const { date, location, description } = req.body;
@@ -65,9 +70,9 @@ exports.updateTour = async (req, res) => {
   }
 };
 
-//---Delete Tour Route---\\
+//---Delete Tour---//
 exports.deleteTour = async (req, res) => {
-  const userId = req.user.id; 
+  const userId = req.user.id;
   const tourId = req.params.id;
   try {
     const { rowCount } = await db.query(

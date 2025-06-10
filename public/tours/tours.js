@@ -5,14 +5,14 @@ const tourModal = document.getElementById("tourModal");
 const tourForm = document.getElementById("tourForm");
 const tourIdInput = document.getElementById("tourId");
 
-//---Load all tours for logged-in user---\\
+//---Load all tours for logged-in user---//
 async function loadTours() {
   if (!token) {
     message.innerText = "You must be logged in to view your tours.";
     return;
   }
   try {
-    const res = await fetch("/api/me/tours", {
+    const res = await fetch("/api/tours", {
       headers: { Authorization: "Bearer " + token },
     });
     const tours = res.ok ? await res.json() : [];
@@ -47,7 +47,7 @@ async function loadTours() {
 
 document.addEventListener("DOMContentLoaded", loadTours);
 
-//---Add Tour---\\
+//---Add Tour---//
 document.getElementById("addTourBtn").onclick = () => {
   tourForm.reset();
   tourIdInput.value = "";
@@ -57,7 +57,7 @@ document.getElementById("addTourBtn").onclick = () => {
   modal.show();
 };
 
-//---Edit Tour---\\
+//---Edit Tour---//
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("edit-btn")) {
     tourIdInput.value = e.target.dataset.id;
@@ -71,7 +71,7 @@ document.addEventListener("click", (e) => {
   }
 });
 
-//---Delete Tour---\\
+//---Delete Tour---//
 document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("delete-btn")) {
     if (confirm("Are you sure you want to delete this tour?")) {
@@ -94,7 +94,7 @@ document.addEventListener("click", async (e) => {
   }
 });
 
-//---Handle submitting add/edit tour form---\\
+//---Handle submitting add/edit tour form---//
 tourForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const id = tourIdInput.value;
