@@ -4,8 +4,9 @@ const path = require("path");
 require("dotenv").config();
 
 const authRoutes = require("./routes/auth.routes");
-const toursRoutes = require("./routes/tours.routes");
 const competitionsRoutes = require("./routes/competitions.routes");
+const leaderboardRoutes = require("./routes/leaderboard.routes");
+const toursRoutes = require("./routes/tours.routes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,8 +25,9 @@ app.get("/register", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/tours", toursRoutes);
 app.use("/api/competitions", competitionsRoutes);
+app.use("/api/leaderboard", leaderboardRoutes);
+app.use("/api/tours", toursRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
