@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const competitionsController = require("../controllers/competitions.controller");
-const authMiddleware = require("../middleware/auth.middleware");
+const auth = require("../middleware/auth.middleware");
 
 router.get("/", competitionsController.getCompetitions);
-router.get("/active", competitionsController.getActiveCompetitions);
-router.post("/", authMiddleware, competitionsController.createCompetition);
-router.put("/:id", authMiddleware, competitionsController.updateCompetition);
-router.delete("/:id", authMiddleware, competitionsController.deleteCompetition);
+router.get("/history", competitionsController.getHistoryCompetitions);
+router.post("/", auth, competitionsController.createCompetition);
+router.put("/:id", auth, competitionsController.updateCompetition);
+router.delete("/:id", auth, competitionsController.deleteCompetition);
 
 module.exports = router;
