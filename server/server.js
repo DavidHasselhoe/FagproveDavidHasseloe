@@ -27,10 +27,10 @@ app.get("/register", (req, res) => {
 
 //---API Routes with proper prefixes---//
 app.use("/api/auth", authRoutes);
-app.use("/api/competitions", competitionsRoutes); // Your routes will be /api/competitions/
-app.use("/api/leaderboard", leaderboardRoutes); // Routes will be /api/leaderboard/
-app.use("/api/tours", toursRoutes); // Routes will be /api/tours/
-app.use("/api/lottery", lotteryRoutes); // Routes will be /api/lottery/
+app.use("/api/competitions", competitionsRoutes);
+app.use("/api/leaderboard", leaderboardRoutes);
+app.use("/api/tours", toursRoutes);
+app.use("/api/lottery", lotteryRoutes);
 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/login/login.html"));
