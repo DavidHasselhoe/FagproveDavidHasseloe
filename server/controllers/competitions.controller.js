@@ -5,17 +5,20 @@ der man kunne opprette, oppdatere og slette innlegg. Så jeg har tatt utgangspun
 
 const db = require("../database");
 
-//---Get only ACTIVE competitions---//
+//---Get only ACTIVE competitions (not archived)---//
 exports.getCompetitions = async (req, res) => {
   try {
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-    
-    const { rows } = await db.query(`
+    const today = new Date().toISOString().split("T")[0];
+
+    const { rows } = await db.query(
+      `
       SELECT * FROM competitions 
-      WHERE start_date <= $1 AND end_date >= $1
+      WHERE start_date <= $1 AND end_date >= $1 AND is_archived = FALSE
       ORDER BY start_date DESC
-    `, [today]);
-    
+    `,
+      [today]
+    );
+
     res.json(rows);
   } catch (err) {
     console.error("Error fetching active competitions:", err);
@@ -40,26 +43,32 @@ exports.createCompetition = async (req, res) => {
     }
 
     if (!userResult.rows[0].is_admin) {
-      return res.status(403).json({ error: "Only administrators can create competitions" });
+      return res
+        .status(403)
+        .json({ error: "Only administrators can create competitions" });
     }
 
-    //---Check if any ACTIVE competition already exists---//
-    const today = new Date().toISOString().split('T')[0];
-    const activeCompetition = await db.query(`
+    //---Check if any ACTIVE (non-archived) competition exists---//
+    const today = new Date().toISOString().split("T")[0];
+    const activeCompetition = await db.query(
+      `
       SELECT COUNT(*) as count FROM competitions 
-      WHERE start_date <= $1 AND end_date >= $1
-    `, [today]);
+      WHERE start_date <= $1 AND end_date >= $1 AND is_archived = FALSE
+    `,
+      [today]
+    );
 
     if (parseInt(activeCompetition.rows[0].count) > 0) {
-      return res.status(409).json({ 
-        error: "An active competition already exists. Only one active competition is allowed at a time." 
+      return res.status(409).json({
+        error:
+          "An active competition already exists. Only one active competition is allowed at a time.",
       });
     }
 
     //---Create the competition---//
     const result = await db.query(
-      "INSERT INTO competitions (name, description, start_date, end_date, prize) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-      [name, description, start_date, end_date, prize]
+      "INSERT INTO competitions (name, description, start_date, end_date, prize, is_archived) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
+      [name, description, start_date, end_date, prize, false]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -86,17 +95,21 @@ exports.updateCompetition = async (req, res) => {
     }
 
     if (!userResult.rows[0].is_admin) {
-      return res.status(403).json({ error: "Only administrators can update competitions" });
+      return res
+        .status(403)
+        .json({ error: "Only administrators can update competitions" });
     }
 
-    //---Update the competition---//
+    //---Update the competition (don't change is_archived status)---//
     const result = await db.query(
-      "UPDATE competitions SET name = $1, description = $2, start_date = $3, end_date = $4, prize = $5 WHERE id = $6 RETURNING *",
+      "UPDATE competitions SET name = $1, description = $2, start_date = $3, end_date = $4, prize = $5 WHERE id = $6 AND is_archived = FALSE RETURNING *",
       [name, description, start_date, end_date, prize, id]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Competition not found" });
+      return res
+        .status(404)
+        .json({ error: "Competition not found or already archived" });
     }
 
     res.json(result.rows[0]);
@@ -123,17 +136,21 @@ exports.deleteCompetition = async (req, res) => {
     }
 
     if (!userResult.rows[0].is_admin) {
-      return res.status(403).json({ error: "Only administrators can delete competitions" });
+      return res
+        .status(403)
+        .json({ error: "Only administrators can delete competitions" });
     }
 
-    //---Delete the competition---//
+    //---Only delete non-archived competitions---//
     const result = await db.query(
-      "DELETE FROM competitions WHERE id = $1 RETURNING *",
+      "DELETE FROM competitions WHERE id = $1 AND is_archived = FALSE RETURNING *",
       [id]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Competition not found" });
+      return res
+        .status(404)
+        .json({ error: "Competition not found or already archived" });
     }
 
     res.json({ message: "Competition deleted successfully" });
@@ -143,17 +160,26 @@ exports.deleteCompetition = async (req, res) => {
   }
 };
 
-//---Get finished competitions---//
+//---Get competition history (archived competitions)---//
 exports.getHistoryCompetitions = async (req, res) => {
   try {
     const { rows } = await db.query(`
-      SELECT * FROM competitions
-      WHERE end_date < CURRENT_DATE
-      ORDER BY end_date DESC
+      SELECT 
+        id, 
+        name, 
+        description, 
+        start_date, 
+        end_date, 
+        prize,
+        winner_user_id,
+        drawn_at
+      FROM competitions
+      WHERE is_archived = TRUE
+      ORDER BY drawn_at DESC, end_date DESC
     `);
     res.json(rows);
   } catch (err) {
-    console.error("Error fetching finished competitions:", err);
+    console.error("Error fetching competition history:", err);
     res.status(500).json({ error: "Failed to fetch history competitions" });
   }
 };
