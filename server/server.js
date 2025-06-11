@@ -52,6 +52,7 @@ app.get("/lottery", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Database Admin: http://localhost:8080`);
 });
 
 module.exports = app;
