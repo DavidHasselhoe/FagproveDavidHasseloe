@@ -1,19 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StikkUt App</title>
+    <title>ShtikkUt - Turregistrering</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/index/style.css" rel="stylesheet" />
   </head>
-  <body>
-    <h1>Welcome to StikkUt</h1>
-
-    <nav>
-      <a href="/register/register.html">Register</a>
-      <a href="/login/login.html">Login</a>
-      <a href="/tours/tours.html">My Tours</a>
-      <a href="/competitions/competitions.html">Competitions</a>
-      <a href="/leaderboard/leaderboard.html">Leaderboard</a>
+  <body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="/">ShtikkUt</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto" id="authNav">
+            <!-- Will be populated by JavaScript -->
+          </ul>
+        </div>
+      </div>
     </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-primary text-white py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-3">Velkommen til ShtikkUt!</h1>
+            <p class="lead mb-4">
+              Registrer turene dine, delta i konkurranser og vinn flotte
+              premier.
+            </p>
+          </div>
+          <div class="col-lg-6 text-center">
+            <div class="display-1">🏔️</div>
+            <h3>Start din turopplevelse</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navigation Cards -->
+    <div class="container my-5" id="mainContent">
+      <div class="row g-4">
+        <!-- Mine Turer -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body text-center p-4">
+              <div class="display-4 text-primary mb-3">📍</div>
+              <h5 class="card-title">Mine turer</h5>
+              <p class="card-text text-muted">
+                Registrer og administrer alle dine turer
+              </p>
+              <a href="/tours" class="btn btn-primary btn-lg w-100">
+                Se mine turer
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Konkurranser -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body text-center p-4">
+              <div class="display-4 text-success mb-3">🏆</div>
+              <h5 class="card-title">Konkurranser</h5>
+              <p class="card-text text-muted">
+                Delta i aktive konkurranser og utfordringer
+              </p>
+              <a href="/competitions" class="btn btn-success btn-lg w-100">
+                Se konkurranser
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resultattabell -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body text-center p-4">
+              <div class="display-4 text-warning mb-3">📊</div>
+              <h5 class="card-title">Resultattabell</h5>
+              <p class="card-text text-muted">
+                Se hvem som leder i turregistreringene
+              </p>
+              <a href="/leaderboard" class="btn btn-warning btn-lg w-100">
+                Se tabell
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trekning -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body text-center p-4">
+              <div class="display-4 text-danger mb-3">🎲</div>
+              <h5 class="card-title">Trekning</h5>
+              <p class="card-text text-muted">
+                Delta i trekning og vinn flotte premier
+              </p>
+              <a href="/lottery" class="btn btn-danger btn-lg w-100">
+                Se trekning
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="bg-white py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="mb-4">Hvordan fungerer det?</h2>
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="text-primary display-6 mb-3">1️⃣</div>
+                <h5>Registrer turer</h5>
+                <p class="text-muted">
+                  Logg inn og registrer alle turene du tar
+                </p>
+              </div>
+              <div class="col-md-4">
+                <div class="text-success display-6 mb-3">2️⃣</div>
+                <h5>Delta i konkurranser</h5>
+                <p class="text-muted">Knytt turene til aktive konkurranser</p>
+              </div>
+              <div class="col-md-4">
+                <div class="text-warning display-6 mb-3">3️⃣</div>
+                <h5>Vinn premier</h5>
+                <p class="text-muted">
+                  Delta i trekning og vinn flotte premier
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/index/index.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

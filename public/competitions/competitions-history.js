@@ -4,32 +4,23 @@ const historyLeaderboard = document.getElementById("historyLeaderboard");
 const historyError = document.getElementById("historyError");
 const competitionDetails = document.getElementById("competitionDetails");
 
-//---State management---//
+//---State---//
 let cachedCompetitions = [];
 
 //---Utility functions---//
-function showError(message) {
+const showError = (message) => {
   if (historyError) {
     historyError.textContent = message;
     historyError.classList.remove("d-none");
   }
-}
+};
 
-function hideError() {
-  if (historyError) historyError.classList.add("d-none");
-}
-
-function showLeaderboard() {
-  if (historyLeaderboard) historyLeaderboard.classList.remove("d-none");
-}
-
-function hideLeaderboard() {
-  if (historyLeaderboard) historyLeaderboard.classList.add("d-none");
-}
-
-function clearCompetitionDetails() {
+const hideError = () => historyError?.classList.add("d-none");
+const showLeaderboard = () => historyLeaderboard?.classList.remove("d-none");
+const hideLeaderboard = () => historyLeaderboard?.classList.add("d-none");
+const clearCompetitionDetails = () => {
   if (competitionDetails) competitionDetails.innerHTML = "";
-}
+};
 
 //---Main functions---//
 async function loadHistoryCompetitions() {
@@ -39,13 +30,13 @@ async function loadHistoryCompetitions() {
     if (!historyDropdown) return;
 
     const options = [
-      '<option value="">Choose a competition…</option>',
+      '<option value="">Velg en konkurranse...</option>',
       ...cachedCompetitions.map(
-        (competition) =>
-          `<option value="${competition.id}">
-          ${competition.name} (${formatDate(
-            competition.start_date
-          )} - ${formatDate(competition.end_date)})
+        (comp) =>
+          `<option value="${comp.id}">
+          ${comp.name} (${formatDate(comp.start_date)} - ${formatDate(
+            comp.end_date
+          )})
          </option>`
       ),
     ];
@@ -54,7 +45,7 @@ async function loadHistoryCompetitions() {
     hideError();
   } catch (err) {
     console.error("Error loading history competitions:", err);
-    showError("Failed to load competition history");
+    showError("Kunne ikke laste konkurransehistorikk");
     cachedCompetitions = [];
   }
 }
@@ -69,13 +60,10 @@ async function loadLeaderboardForCompetition(compId) {
     const leaderboardData = await fetchJSON(
       `/api/leaderboard/?competition_id=${compId}`
     );
+    const tbody = historyLeaderboard?.querySelector("tbody");
 
-    if (!historyLeaderboard) return;
-
-    const tbody = historyLeaderboard.querySelector("tbody");
     if (!tbody) return;
 
-    //---Generate leaderboard rows---//
     const rows = leaderboardData.map(
       (user, index) =>
         `<tr>
@@ -90,7 +78,7 @@ async function loadLeaderboardForCompetition(compId) {
     hideError();
   } catch (err) {
     console.error("Error loading leaderboard:", err);
-    showError("Failed to load leaderboard data");
+    showError("Kunne ikke laste resultattabell");
     hideLeaderboard();
   }
 }
@@ -102,21 +90,19 @@ function showCompetitionDetails(compId) {
   }
 
   const competition = cachedCompetitions.find((c) => c.id == compId);
-
   if (!competition) {
     clearCompetitionDetails();
     return;
   }
 
-  //---Build competition details HTML---//
   const details = [
     `<strong>${competition.name}</strong>`,
-    `Period: ${formatDate(competition.start_date)} – ${formatDate(
+    `Periode: ${formatDate(competition.start_date)} – ${formatDate(
       competition.end_date
     )}`,
-    `Prize: ${competition.prize || "No prize specified"}`,
+    `Premie: ${competition.prize || "Ingen premie spesifisert"}`,
     ...(competition.winner_user_id
-      ? [`Winner: ${competition.winner_user_id}`]
+      ? [`Vinner: ${competition.winner_user_id}`]
       : []),
   ];
 
@@ -140,8 +126,5 @@ async function handleDropdownChange(event) {
 //---Initialize---//
 document.addEventListener("DOMContentLoaded", async () => {
   await loadHistoryCompetitions();
-
-  if (historyDropdown) {
-    historyDropdown.addEventListener("change", handleDropdownChange);
-  }
+  historyDropdown?.addEventListener("change", handleDropdownChange);
 });

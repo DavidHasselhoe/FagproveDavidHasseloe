@@ -6,7 +6,6 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   try {
     const res = await fetch("/api/auth/login", {
-      // Fixed: was /api/login
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

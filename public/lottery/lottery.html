@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lotteri-trekning - StikkUt</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="/index/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="/">StikkUt</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/tours">Mine turer</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/competitions">Konkurranser</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/leaderboard">Resultattabell</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/lottery">Trekning</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav" id="authNav">
+            <!-- Will be populated by JavaScript -->
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container my-4">
+      <h1>Lotteri-trekning</h1>
+      <div id="message"></div>
+      <div id="competitionInfo" class="mb-4"></div>
+      <div id="winnerDisplay" class="alert alert-success mb-4 d-none"></div>
+
+      <div id="drawSection" class="mb-4 d-none">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">🎯 Utfør trekning</h5>
+            <p class="card-text">
+              Som administrator kan du utføre trekningen for den aktive
+              konkurransen.
+            </p>
+            <button id="drawButton" class="btn btn-danger btn-lg">
+              🎲 Trekk vinner
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <h2>Deltakere & Sjanser</h2>
+          <div class="table-responsive">
+            <table
+              id="participantsTable"
+              class="table table-striped table-hover"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Plassering</th>
+                  <th scope="col">Navn</th>
+                  <th scope="col">Turer</th>
+                  <th scope="col">Sjanse</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <h2>Lotteri-statistikk</h2>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">📊 Statistikk</h5>
+              <p>
+                <strong>Totale lodd:</strong> <span id="totalTickets">0</span>
+              </p>
+              <p>
+                <strong>Totale deltakere:</strong>
+                <span id="totalParticipants">0</span>
+              </p>
+              <hr />
+              <small class="text-muted"
+                >Hver tur gir deg ett lotteri-lodd. Flere turer = høyere sjanse
+                for å vinne!</small
+              >
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h2>Tidligere vinnere</h2>
+            <div id="lotteryHistory"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/common/common.js"></script>
+    <script src="lottery.js"></script>
+  </body>
+</html>

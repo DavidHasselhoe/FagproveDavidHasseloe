@@ -82,4 +82,7 @@ async function initializeLeaderboard() {
 }
 
 //---Event listeners---//
-document.addEventListener("DOMContentLoaded", initializeLeaderboard);
+document.addEventListener("DOMContentLoaded", () => {
+  updateAuthNav(); // Fra common.js - for konsistent navigasjon
+  initializeLeaderboard();
+});

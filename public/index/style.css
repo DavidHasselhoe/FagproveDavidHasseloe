@@ -1,0 +1,111 @@
+/* Omega 365 Color Palette */
+:root {
+  --omega-teal: #52bcba;
+  --omega-orange: #f5a553;
+  --omega-blue: #3575b3;
+  --omega-dark: #061834;
+  --omega-light-blue: #a8c1e0;
+  --omega-gray: #88959d;
+  --omega-light-gray: #d8dde1;
+}
+
+/* Override Bootstrap primary colors */
+.bg-primary {
+  background-color: var(--omega-blue) !important;
+}
+
+.btn-primary {
+  background-color: var(--omega-teal);
+  border-color: var(--omega-teal);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #469a98;
+  border-color: #469a98;
+}
+
+.btn-success {
+  background-color: var(--omega-orange);
+  border-color: var(--omega-orange);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #e69642;
+  border-color: #e69642;
+}
+
+.btn-warning {
+  background-color: var(--omega-gray);
+  border-color: var(--omega-gray);
+  color: white;
+}
+
+.btn-danger {
+  background-color: var(--omega-dark);
+  border-color: var(--omega-dark);
+  color: white;
+}
+
+/* Custom card styling */
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Text colors matching palette */
+.text-primary {
+  color: var(--omega-teal) !important;
+}
+
+.text-success {
+  color: var(--omega-orange) !important;
+}
+
+.text-warning {
+  color: var(--omega-gray) !important;
+}
+
+.text-danger {
+  color: var(--omega-dark) !important;
+}
+
+/* Badge styling */
+.badge.bg-primary {
+  background-color: var(--omega-blue) !important;
+}
+
+/* Alert styling */
+.alert-success {
+  background-color: rgba(82, 188, 186, 0.1);
+  border-color: var(--omega-teal);
+  color: #2d5554;
+}
+
+.alert-danger {
+  background-color: rgba(6, 24, 52, 0.1);
+  border-color: var(--omega-dark);
+  color: var(--omega-dark);
+}
+
+/* Navigation styling */
+.navbar-brand {
+  color: white !important;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.nav-link.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+/* Footer or additional styling */
+.bg-light {
+  background-color: #f8f9fa !important;
+}
