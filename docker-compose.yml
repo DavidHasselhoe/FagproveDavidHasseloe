@@ -1,0 +1,56 @@
+services:
+  app:
+    image: node:18
+    container_name: ShtikkUtApp-App
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    environment:
+      - JWT_SECRET=w9jR@h6uY4!pA8L3zM2qT0cBvXkEKe92
+      - DATABASE_URL=postgresql://postgres:DavidDBSU1%21@postgres:5432/StikkUtApp
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "npm install && node server/server.js"
+
+  postgres:
+    image: postgres:15
+    container_name: StikkUtApp-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=DavidDBSU1!
+      - POSTGRES_DB=StikkUtApp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: StikkUtApp-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      PGADMIN_CONFIG_WTF_CSRF_ENABLED: "False"
+    ports:
+      - "8080:80"
+    volumes:
+      - ./pgadmin-servers.json:/pgadmin4/servers.json:ro
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  pgadmin_data:

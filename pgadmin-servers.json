@@ -1,0 +1,15 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "StikkUt Database",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "StikkUtApp",
+      "Username": "postgres",
+      "Password": "DavidDBSU1!",
+      "SSLMode": "prefer",
+      "Favorite": true
+    }
+  }
+}
