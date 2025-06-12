@@ -18,27 +18,27 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "../public")));
 
+//---Root route---//
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index/index.html"));
 });
-app.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/register/register.html"));
-});
 
-//---API Routes with proper prefixes---//
+//---API Routes---//
 app.use("/api/auth", authRoutes);
 app.use("/api/competitions", competitionsRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/tours", toursRoutes);
 app.use("/api/lottery", lotteryRoutes);
 
+//---HTML routes---//
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/register/register.html"));
+});
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/login/login.html"));
 });
 app.get("/competitions", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "../public/competitions/competitions.html")
-  );
+  res.sendFile(path.join(__dirname, "../public/competitions/competitions.html"));
 });
 app.get("/tours", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/tours/tours.html"));
