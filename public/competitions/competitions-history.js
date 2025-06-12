@@ -83,6 +83,7 @@ async function loadLeaderboardForCompetition(compId) {
   }
 }
 
+//---Show Competition Details---//
 function showCompetitionDetails(compId) {
   if (!competitionDetails || !compId) {
     clearCompetitionDetails();
@@ -101,8 +102,12 @@ function showCompetitionDetails(compId) {
       competition.end_date
     )}`,
     `Premie: ${competition.prize || "Ingen premie spesifisert"}`,
-    ...(competition.winner_user_id
-      ? [`Vinner: ${competition.winner_user_id}`]
+    ...(competition.winner_user_id &&
+    competition.first_name &&
+    competition.last_name
+      ? [`🏆 Vinner: ${competition.first_name} ${competition.last_name}`]
+      : competition.winner_user_id
+      ? [`🏆 Vinner: Bruker ${competition.winner_user_id}`]
       : []),
   ];
 
