@@ -32,17 +32,25 @@ exports.createTour = async (req, res) => {
   const userId = req.user.id;
 
   try {
+    //---Convert Empty String To Null For Competition ID---//
+    const competitionId =
+      competition_id === "" || competition_id === "null"
+        ? null
+        : competition_id;
+
     const result = await db.query(
       `INSERT INTO tours (user_id, date, location, description, competition_id) 
        VALUES ($1, $2, $3, $4, $5) 
        RETURNING *`,
-      [userId, date, location, description, competition_id]
+      [userId, date, location, description, competitionId]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error("Error creating tour:", err);
-    res.status(500).json({ error: "Failed to create tour" });
+    res
+      .status(500)
+      .json({ error: "Failed to create tour", details: err.message });
   }
 };
 
@@ -53,12 +61,18 @@ exports.updateTour = async (req, res) => {
   const userId = req.user.id;
 
   try {
+    //---Convert Empty String To Null For Competition ID---//
+    const competitionId =
+      competition_id === "" || competition_id === "null"
+        ? null
+        : competition_id;
+
     const result = await db.query(
       `UPDATE tours 
        SET date = $1, location = $2, description = $3, competition_id = $4 
        WHERE id = $5 AND user_id = $6 
        RETURNING *`,
-      [date, location, description, competition_id, id, userId]
+      [date, location, description, competitionId, id, userId]
     );
 
     if (result.rows.length === 0) {
@@ -68,7 +82,9 @@ exports.updateTour = async (req, res) => {
     res.json(result.rows[0]);
   } catch (err) {
     console.error("Error updating tour:", err);
-    res.status(500).json({ error: "Failed to update tour" });
+    res
+      .status(500)
+      .json({ error: "Failed to update tour", details: err.message });
   }
 };
 
@@ -94,7 +110,7 @@ exports.deleteTour = async (req, res) => {
   }
 };
 
-//---Get Single Tour (for editing)---//
+//---Get Single Tour For Editing---//
 exports.getTour = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
