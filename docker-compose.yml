@@ -1,7 +1,7 @@
 services:
   app:
     image: node:18
-    container_name: ShtikkUtApp-App
+    container_name: ShtikkUt-App
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     environment:
       - JWT_SECRET=w9jR@h6uY4!pA8L3zM2qT0cBvXkEKe92
-      - DATABASE_URL=postgresql://postgres:DavidDBSU1%21@postgres:5432/StikkUtApp
+      - DATABASE_URL=postgresql://postgres:DavidDBSU1%21@postgres:5432/ShtikkUtApp
     depends_on:
       postgres:
         condition: service_healthy
@@ -18,25 +18,26 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: StikkUtApp-db
+    container_name: ShtikkUt-db
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=DavidDBSU1!
-      - POSTGRES_DB=StikkUtApp
+      - POSTGRES_DB=ShtikkUtApp
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ShtikkUtApp"]
+      interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: StikkUtApp-pgadmin
+    container_name: ShtikkUt-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -49,7 +50,8 @@ services:
       - ./pgadmin-servers.json:/pgadmin4/servers.json:ro
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
