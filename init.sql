@@ -15,6 +15,7 @@ CREATE TABLE
     IF NOT EXISTS competitions (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
+        description TEXT,
         start_date DATE NOT NULL,
         end_date DATE NOT NULL,
         prize VARCHAR(255),
@@ -29,7 +30,7 @@ CREATE TABLE
     IF NOT EXISTS tours (
         id SERIAL PRIMARY KEY,
         user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-        competition_id INT NOT NULL REFERENCES competitions (id) ON DELETE CASCADE,
+        competition_id INT REFERENCES competitions (id) ON DELETE CASCADE,
         date DATE NOT NULL,
         location VARCHAR(255) NOT NULL,
         description VARCHAR(500),
