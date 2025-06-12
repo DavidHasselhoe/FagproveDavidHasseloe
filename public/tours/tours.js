@@ -1,25 +1,22 @@
+//---Simplified Tours.js Using Common Functions---//
 const token = localStorage.getItem("token");
-
-// DOM elements
 const tableBody = document.getElementById("toursTableBody");
 const addBtn = document.getElementById("addTourBtn");
 const form = document.getElementById("tourForm");
-const messageDiv = document.getElementById("message");
 
 let modal;
 
-// Initialize
+//---Initialize---//
 document.addEventListener("DOMContentLoaded", () => {
-  modal = new bootstrap.Modal(document.getElementById("tourModal"));
   updateAuthNav();
   loadTours();
   loadCompetitions();
 
-  addBtn.onclick = () => openModal();
+  addBtn.onclick = () => handleModal("tourModal", "Ny tur");
   form.onsubmit = saveTour;
 });
 
-// Load tours
+//---Load Tours---//
 async function loadTours() {
   if (!token) return (location.href = "/login");
 
@@ -27,166 +24,110 @@ async function loadTours() {
     const tours = await fetchJSON("/api/tours", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    showTours(tours);
+
+    renderTable(
+      tableBody,
+      tours,
+      [
+        (tour) => `<td>${formatDate(tour.date)}</td>`,
+        (tour) => `<td><strong>${tour.location}</strong></td>`,
+        (tour) => `<td>${tour.description || "-"}</td>`,
+        (tour) =>
+          `<td>${
+            tour.competition_name
+              ? `<span class="badge bg-primary">${tour.competition_name}</span>`
+              : "-"
+          }</td>`,
+        (tour) => `<td>
+        <button class="btn btn-sm btn-outline-primary" onclick="editTour(${tour.id})">Rediger</button>
+        <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteTour(${tour.id})">Slett</button>
+      </td>`,
+      ],
+      "Ingen turer registrert"
+    );
   } catch (err) {
-    showMessage(err.message, "error");
-    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4">Feil ved lasting</td></tr>`;
+    handleApiError(err, "Kunne ikke laste turer");
   }
 }
 
-// Show tours in table
-function showTours(tours) {
-  if (!tours.length) {
-    tableBody.innerHTML = `
-      <tr><td colspan="5" class="text-center py-4">
-        <p>Ingen turer registrert</p>
-        <small class="text-muted">Klikk "Legg til ny tur" for å starte</small>
-      </td></tr>
-    `;
-    return;
-  }
-
-  tableBody.innerHTML = tours
-    .map(
-      (tour) => `
-    <tr>
-      <td>${new Date(tour.date).toLocaleDateString("no")}</td>
-      <td><strong>${tour.location}</strong></td>
-      <td>${tour.description || "-"}</td>
-      <td>${
-        tour.competition_name
-          ? `<span class="badge bg-primary">${tour.competition_name}</span>`
-          : "-"
-      }</td>
-      <td>
-        <button class="btn btn-sm btn-outline-primary" onclick="editTour(${
-          tour.id
-        })">Rediger</button>
-        <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteTour(${
-          tour.id
-        })">Slett</button>
-      </td>
-    </tr>
-  `
-    )
-    .join("");
-}
-
-// Load competitions for dropdown
+//---Load Competitions---//
 async function loadCompetitions() {
   try {
-    const res = await fetch("/api/competitions");
-    if (!res.ok) return;
-
-    const competitions = await res.json();
+    const competitions = await fetchJSON("/api/competitions");
     const select = document.getElementById("competition_id");
-
-    select.innerHTML = `
-      <option value="">Ingen konkurranse</option>
-      ${competitions
+    select.innerHTML =
+      `<option value="">Ingen konkurranse</option>` +
+      competitions
         .map((c) => `<option value="${c.id}">${c.name}</option>`)
-        .join("")}
-    `;
+        .join("");
   } catch (err) {
     console.log("Could not load competitions");
   }
 }
 
-// Open modal
-function openModal(tour = null) {
-  if (tour) {
-    document.getElementById("tourModalLabel").textContent = "Rediger tur";
-    document.getElementById("tourId").value = tour.id;
-    document.getElementById("date").value = tour.date;
-    document.getElementById("location").value = tour.location;
-    document.getElementById("description").value = tour.description || "";
-    document.getElementById("competition_id").value = tour.competition_id || "";
-  } else {
-    document.getElementById("tourModalLabel").textContent = "Ny tur";
-    form.reset();
-  }
-  modal.show();
-}
-
-// Save tour
+//---Save Tour---//
 async function saveTour(e) {
   e.preventDefault();
+  const submitBtn = form.querySelector('button[type="submit"]');
 
-  const data = new FormData(form);
-  const tour = Object.fromEntries(data);
+  const formData = new FormData(form);
+  const tour = Object.fromEntries(formData);
 
-  if (!tour.description) tour.description = null;
+  if (!tour.description?.trim()) tour.description = null;
   if (!tour.competition_id) tour.competition_id = null;
 
   const isEdit = !!tour.id;
 
-  try {
-    const res = await fetch(isEdit ? `/api/tours/${tour.id}` : "/api/tours", {
+  await apiCall(
+    isEdit ? `/api/tours/${tour.id}` : "/api/tours",
+    {
       method: isEdit ? "PUT" : "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(tour),
-    });
+    },
+    submitBtn,
+    isEdit ? "Tur oppdatert!" : "Tur lagret!"
+  );
 
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.message || "Kunne ikke lagre");
-    }
-
-    showMessage(isEdit ? "Tur oppdatert!" : "Tur lagret!", "success");
-    modal.hide();
-    loadTours();
-  } catch (err) {
-    showMessage(err.message, "error");
-  }
+  bootstrap.Modal.getInstance(document.getElementById("tourModal")).hide();
+  loadTours();
 }
 
-// Edit tour
+//---Edit Tour---//
 async function editTour(id) {
   try {
-    const res = await fetch(`/api/tours/${id}`, {
+    const tour = await fetchJSON(`/api/tours/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
-    if (!res.ok) throw new Error("Kunne ikke hente tur");
-
-    const tour = await res.json();
-    openModal(tour);
+    handleModal("tourModal", "Rediger tur", tour);
   } catch (err) {
-    showMessage(err.message, "error");
+    handleApiError(err, "Kunne ikke hente tur");
   }
 }
 
-// Delete tour
+//---Delete Tour Function---//
 async function deleteTour(id) {
-  if (!confirm("Slett denne turen?")) return;
+  showDeleteConfirmation("Slett tur", null, async () => {
+    try {
+      await apiCall(
+        `/api/tours/${id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        },
+        null,
+        "Tur slettet!"
+      );
 
-  try {
-    const res = await fetch(`/api/tours/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!res.ok) throw new Error("Kunne ikke slette");
-
-    showMessage("Tur slettet!", "success");
-    loadTours();
-  } catch (err) {
-    showMessage(err.message, "error");
-  }
+      loadTours();
+    } catch (err) {
+      console.error("Error deleting tour:", err);
+    }
+  });
 }
 
-// Show message
-function showMessage(msg, type) {
-  const alertType = type === "error" ? "alert-danger" : "alert-success";
-  messageDiv.innerHTML = `
-    <div class="alert ${alertType} alert-dismissible fade show">
-      ${msg}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-  `;
-
-  setTimeout(() => (messageDiv.innerHTML = ""), 4000);
-}
+window.editTour = editTour;
+window.deleteTour = deleteTour;
