@@ -1,0 +1,25 @@
+/*Brukte en god del chatGPT for styling av siden, grunnet at jeg ikke ville bruke så altfor mye tid på det*/
+
+/*---Alert Styling---*/
+.alert-success {
+  background-color: rgba(82, 188, 186, 0.1);
+  border-color: var(--omega-teal);
+  color: #2d5554;
+}
+
+.alert-danger {
+  background-color: rgba(6, 24, 52, 0.1);
+  border-color: var(--omega-dark);
+  color: var(--omega-dark);
+}
+
+/*---Badges---*/
+.badge {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.badge.bg-primary {
+  background-color: var(--omega-blue) !important;
+}

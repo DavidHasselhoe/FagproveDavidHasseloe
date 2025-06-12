@@ -1,0 +1,118 @@
+/*Brukte en god del chatGPT for styling av siden, grunnet at jeg ikke ville bruke så altfor mye tid på det*/
+
+/*---Button Base---*/
+.btn {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/*---Consistent Hover Effect---*/
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/*---Primary Button (Omega Blue)---*/
+.btn-primary {
+  background-color: var(--omega-blue);
+  border-color: var(--omega-blue);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: color-mix(in srgb, var(--omega-blue) 80%, white 20%);
+  border-color: color-mix(in srgb, var(--omega-blue) 80%, white 20%);
+  color: white;
+}
+
+/*---Secondary Button (Omega Teal)---*/
+.btn-secondary {
+  background-color: var(--omega-teal);
+  border-color: var(--omega-teal);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: color-mix(in srgb, var(--omega-teal) 80%, white 20%);
+  border-color: color-mix(in srgb, var(--omega-teal) 80%, white 20%);
+  color: white;
+}
+
+/*---Info Button (Omega Orange)---*/
+.btn-info {
+  background-color: var(--omega-orange);
+  border-color: var(--omega-orange);
+  color: white;
+}
+
+.btn-info:hover {
+  background-color: color-mix(in srgb, var(--omega-orange) 80%, white 20%);
+  border-color: color-mix(in srgb, var(--omega-orange) 80%, white 20%);
+  color: white;
+}
+
+/*---Warning Button (Omega Light Blue)---*/
+.btn-warning {
+  background-color: var(--omega-light-blue);
+  border-color: var(--omega-light-blue);
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: color-mix(in srgb, var(--omega-light-blue) 80%, white 20%);
+  border-color: color-mix(in srgb, var(--omega-light-blue) 80%, white 20%);
+  color: white;
+}
+
+/*---Success Button (Keep Green for Actions)---*/
+.btn-success {
+  background-color: var(--omega-green);
+  border-color: var(--omega-green);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: color-mix(in srgb, var(--omega-green) 80%, white 20%);
+  border-color: color-mix(in srgb, var(--omega-green) 80%, white 20%);
+  color: white;
+}
+
+/*---Modal Buttons (Keep Standard)---*/
+.btn-modal-save {
+  background-color: var(--omega-green) !important;
+  border-color: var(--omega-green) !important;
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+.btn-modal-save:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--omega-green) 80%,
+    white 20%
+  ) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--omega-green) 80%,
+    white 20%
+  ) !important;
+  color: white !important;
+}
+
+.btn-modal-cancel {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+.btn-modal-cancel:hover {
+  background-color: #5a6268 !important;
+  border-color: #5a6268 !important;
+  color: white !important;
+}

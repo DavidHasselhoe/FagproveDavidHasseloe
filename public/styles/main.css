@@ -1,0 +1,20 @@
+/*Brukte en god del chatGPT for styling av siden, grunnet at jeg ikke ville bruke så altfor mye tid på det*/
+
+/*---Import All Components---*/
+@import url("./base/variables.css");
+@import url("./base/typography.css");
+@import url("./components/navigation.css");
+@import url("./components/buttons.css");
+@import url("./components/tables.css");
+@import url("./components/forms.css");
+@import url("./components/cards.css");
+@import url("./components/alerts.css");
+
+/*---Bootstrap Overrides---*/
+.bg-primary {
+  background-color: var(--omega-blue) !important;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}

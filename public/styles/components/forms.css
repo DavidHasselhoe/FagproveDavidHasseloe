@@ -1,0 +1,14 @@
+/*Brukte en god del chatGPT for styling av siden, grunnet at jeg ikke ville bruke så altfor mye tid på det*/
+
+/*---Forms---*/
+.form-label {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+.form-control {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}
