@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const db = require("../database");
 const jwt = require("jsonwebtoken");
 
-//---Register Route---\\
+//---Register Route---//
 exports.register = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
 
@@ -35,7 +35,7 @@ exports.register = async (req, res) => {
   }
 };
 
-//---Login Route---\\
+//---Login Route---//
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -62,7 +62,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "3h" }
     );
 
     res.status(200).json({ message: "Login successful", token });
@@ -72,7 +72,7 @@ exports.login = async (req, res) => {
   }
 };
 
-//---Get Profile Route---\\
+//---Get Profile Route---//
 exports.getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
