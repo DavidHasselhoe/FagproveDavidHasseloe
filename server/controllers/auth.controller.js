@@ -9,7 +9,7 @@ exports.register = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
 
   if (!first_name || !last_name || !email || !password) {
-    return res.status(400).json({ error: "All fields are required" });
+    return res.status(400).json({ error: "Alle felt er påkrevd" });
   }
 
   try {
@@ -17,9 +17,9 @@ exports.register = async (req, res) => {
       email,
     ]);
     if (existing.rows.length > 0) {
-      return res
-        .status(409)
-        .json({ error: "A user with this email already exists" });
+      return res.status(409).json({
+        error: "En bruker med denne e-post addressen finnes allerede",
+      });
     }
 
     const hash = await bcrypt.hash(password, 10);
@@ -28,10 +28,10 @@ exports.register = async (req, res) => {
       [first_name, last_name, email, hash]
     );
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ message: "Bruker opprettet!" });
   } catch (err) {
     console.error("Error during registration:", err);
-    res.status(500).json({ error: "An internal error occurred" });
+    res.status(500).json({ error: "En intern feil oppstod" });
   }
 };
 
@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required" });
+    return res.status(400).json({ error: "E-post og passord er påkrevd" });
   }
 
   try {
@@ -49,14 +49,14 @@ exports.login = async (req, res) => {
     ]);
 
     if (userResult.rows.length === 0) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Ugyldige påloggingsopplysninger" });
     }
 
     const user = userResult.rows[0];
     const match = await bcrypt.compare(password, user.password_hash);
 
     if (!match) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Ugyldige påloggingsopplysninger" });
     }
 
     const token = jwt.sign(
@@ -65,10 +65,10 @@ exports.login = async (req, res) => {
       { expiresIn: "3h" }
     );
 
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({ message: "Innlogging vellykket", token });
   } catch (err) {
     console.error("Error during login:", err);
-    res.status(500).json({ error: "An internal error occurred" });
+    res.status(500).json({ error: "En intern feil oppstod" });
   }
 };
 
@@ -82,12 +82,12 @@ exports.getProfile = async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Bruker ikke funnet" });
     }
 
     res.json(result.rows[0]);
   } catch (err) {
     console.error("Error fetching user profile:", err);
-    res.status(500).json({ error: "Failed to fetch profile" });
+    res.status(500).json({ error: "Feil ved henting av profil" });
   }
 };
