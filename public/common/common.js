@@ -46,7 +46,7 @@ function showMessage(msg, type = "info") {
 //---Error Handling---//
 function handleApiError(err, defaultMessage = "En feil oppstod") {
   if (err.message === "Sesjon utløpt") {
-    return; 
+    return;
   }
 
   const message = err.message.includes("HTTP error")
@@ -149,17 +149,26 @@ async function updateAuthNav() {
   if (token) {
     const user = await getCurrentUser();
     const firstName = user ? user.first_name : "Bruker";
+    const fullName = user ? `${user.first_name} ${user.last_name}` : "Bruker";
 
     authNav.innerHTML = `
       <li class="nav-item d-flex align-items-center me-3">
         <span class="navbar-text text-light d-flex align-items-center">
-          <i class="fas fa-user me-2"></i>
+          <i class="fas fa-user me-2" aria-hidden="true"></i>
           Hei, ${firstName}!
         </span>
       </li>
       <li class="nav-item dropdown d-flex align-items-center">
-        <a class="nav-link dropdown-toggle d-flex align-items-center justify-content-center py-2 px-3" href="#" role="button" data-bs-toggle="dropdown" style="min-height: 40px;">
-          <i class="fas fa-user-circle fa-2x"></i>
+        <a class="nav-link dropdown-toggle d-flex align-items-center justify-content-center py-2 px-3" 
+           href="#" 
+           role="button" 
+           data-bs-toggle="dropdown" 
+           aria-expanded="false"
+           aria-label="Brukermeny for ${fullName}"
+           title="Åpne brukermeny"
+           style="min-height: 40px;">
+          <i class="fas fa-user-circle fa-2x" aria-hidden="true"></i>
+          <span class="visually-hidden">Brukermeny</span>
         </a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="#" onclick="logout()">Logg ut</a></li>
@@ -169,10 +178,16 @@ async function updateAuthNav() {
   } else {
     authNav.innerHTML = `
       <li class="nav-item">
-        <a class="nav-link" href="/login">Logg inn</a>
+        <a class="nav-link" href="/login" aria-label="Gå til innloggingsside">
+          <i class="fas fa-sign-in-alt me-2" aria-hidden="true"></i>
+          Logg inn
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/register">Registrer</a>
+        <a class="nav-link" href="/register" aria-label="Gå til registreringsside">
+          <i class="fas fa-user-plus me-2" aria-hidden="true"></i>
+          Registrer
+        </a>
       </li>
     `;
   }
@@ -231,25 +246,41 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 //---Universal Modal Handler---//
 function handleModal(modalId, titleText = "", formData = null) {
-  const modalElement = document.getElementById(modalId);
-  const modal = new bootstrap.Modal(modalElement);
-  const titleElement = modalElement.querySelector(".modal-title");
-  const form = modalElement.querySelector("form");
+  const modal = document.getElementById(modalId);
+  const form = modal.querySelector("form");
+  const title = modal.querySelector(".modal-title");
 
-  if (titleElement) titleElement.textContent = titleText;
+  // Set title
+  if (title) title.textContent = titleText;
 
-  if (formData && form) {
-    // Populate form with data
+  if (!formData) {
+    form.reset();
+
+    // Force clear all hidden fields
+    const hiddenInputs = form.querySelectorAll('input[type="hidden"]');
+    hiddenInputs.forEach((input) => {
+      input.value = "";
+      input.removeAttribute("value");
+    });
+
+    // Double-check ID field specifically
+    const idField = form.querySelector('input[name="id"]');
+    if (idField) {
+      idField.value = "";
+      idField.removeAttribute("value");
+    }
+  } else {
+    form.reset();
     Object.entries(formData).forEach(([key, value]) => {
       const field = form.querySelector(`[name="${key}"]`);
-      if (field) field.value = value || "";
+      if (field) {
+        field.value = value || "";
+      }
     });
-  } else if (form) {
-    form.reset();
   }
 
-  modal.show();
-  return modal;
+  //---Show modal---//
+  new bootstrap.Modal(modal).show();
 }
 
 //---Universal API Call with Loading---//
