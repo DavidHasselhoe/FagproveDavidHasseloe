@@ -35,6 +35,9 @@ async function loadLotteryData() {
       "Ingen deltakere funnet"
     );
 
+    // FIX: Update the statistics display
+    updateStatistics(data.totalTickets || 0, data.participants.length || 0);
+
     if (data.isDrawn && data.winner) {
       displayWinner(data.winner);
     } else if (isAdmin && data.participants.length > 0) {
@@ -120,5 +123,19 @@ async function loadLotteryHistory() {
     lotteryHistory.innerHTML = table;
   } catch (err) {
     console.error("Error loading lottery history:", err);
+  }
+}
+
+//---Add Statistics Update Function---//
+function updateStatistics(totalTickets, totalParticipants) {
+  const totalTicketsElement = document.getElementById("totalTickets");
+  const totalParticipantsElement = document.getElementById("totalParticipants");
+
+  if (totalTicketsElement) {
+    totalTicketsElement.textContent = totalTickets;
+  }
+
+  if (totalParticipantsElement) {
+    totalParticipantsElement.textContent = totalParticipants;
   }
 }
