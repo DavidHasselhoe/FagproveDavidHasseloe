@@ -76,7 +76,12 @@ async function saveTour(e) {
   if (!tour.description?.trim()) tour.description = null;
   if (!tour.competition_id) tour.competition_id = null;
 
-  const isEdit = !!tour.id;
+  const isEdit = tour.id && tour.id.trim() !== "" && tour.id !== "null";
+
+  // Remove ID from payload if not editing
+  if (!isEdit) {
+    delete tour.id;
+  }
 
   await apiCall(
     isEdit ? `/api/tours/${tour.id}` : "/api/tours",
