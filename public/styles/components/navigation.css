@@ -1,11 +1,12 @@
 /*Brukte en god del chatGPT for styling av siden, grunnet at jeg ikke ville bruke så altfor mye tid på det*/
 
-/*---Navigation Styling---*/
+/*---Navigation Styling with Better Accessibility---*/
 .navbar-brand {
   font-family: "Inter", sans-serif;
   font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: -0.02em;
+  color: white !important;
 }
 
 .navbar-nav .nav-link {
@@ -14,8 +15,75 @@
   font-size: 0.95rem;
   letter-spacing: 0.01em;
   transition: all 0.2s ease;
+  color: white !important;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem !important;
+  margin: 0 0.25rem;
+  position: relative;
 }
 
+/* Enhanced hover state for better visibility */
 .navbar-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
   font-weight: 600;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced focus state for accessibility */
+.navbar-nav .nav-link:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Active state with better contrast */
+.navbar-nav .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: inset 0 -3px 0 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Active + Hover state */
+.navbar-nav .nav-link.active:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+/* Dropdown improvements */
+.navbar-nav .dropdown-menu {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.navbar-nav .dropdown-item {
+  color: var(--omega-dark) !important;
+  font-weight: 400;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin: 0.25rem;
+}
+
+.navbar-nav .dropdown-item:hover,
+.navbar-nav .dropdown-item:focus {
+  background-color: var(--omega-blue);
+  color: white !important;
+}
+
+/* Hidden text for screen readers */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
