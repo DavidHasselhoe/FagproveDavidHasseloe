@@ -87,3 +87,98 @@
   white-space: nowrap !important;
   border: 0 !important;
 }
+
+/* Enhanced logout button styling */
+.logout-btn {
+  transition: all 0.3s ease !important;
+  border-radius: 6px !important;
+  margin: 0.25rem !important;
+  padding: 0.75rem 1rem !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3) !important;
+}
+
+.logout-btn:hover i {
+  color: white !important;
+  animation: pulse 1s infinite;
+}
+
+.logout-btn:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+  left: 100%;
+}
+
+/* Pulse animation for logout icon */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Enhanced dropdown styling */
+.dropdown-menu {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  min-width: 200px;
+}
+
+.dropdown-header {
+  color: var(--omega-dark) !important;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem 0.5rem 1rem;
+  margin-bottom: 0;
+}
+
+.dropdown-divider {
+  margin: 0.5rem 0;
+  opacity: 0.2;
+}
+
+/* Enhanced dropdown item base */
+.dropdown-item {
+  color: var(--omega-dark) !important;
+  font-weight: 400;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 0.25rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item:not(.logout-btn):hover,
+.dropdown-item:not(.logout-btn):focus {
+  background-color: var(--omega-blue);
+  color: white !important;
+  transform: translateX(4px);
+}

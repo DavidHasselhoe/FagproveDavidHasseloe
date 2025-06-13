@@ -170,8 +170,20 @@ async function updateAuthNav() {
           <i class="fas fa-user-circle fa-2x" aria-hidden="true"></i>
           <span class="visually-hidden">Brukermeny</span>
         </a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#" onclick="logout()">Logg ut</a></li>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <h6 class="dropdown-header">
+              <i class="fas fa-user me-2" aria-hidden="true"></i>
+              ${fullName}
+            </h6>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item logout-btn" href="#" onclick="logout()" aria-label="Logg ut av StikkUt">
+              <i class="fas fa-sign-out-alt me-2 text-danger" aria-hidden="true"></i>
+              <span class="fw-medium">Logg ut</span>
+            </a>
+          </li>
         </ul>
       </li>
     `;
