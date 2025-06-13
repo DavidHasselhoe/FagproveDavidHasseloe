@@ -23,13 +23,17 @@ async function loadCompetitions() {
   try {
     const competitions = await fetchJSON("/api/competitions/");
 
-    if (addBtn && isAdmin) {
-      addBtn.style.display = "block";
-      const hasActive = competitions.length > 0;
-      addBtn.disabled = hasActive;
-      addBtn.textContent = hasActive
-        ? "Aktiv konkurranse eksisterer"
-        : "Legg til konkurranse";
+    if (addBtn) {
+      if (isAdmin) {
+        addBtn.style.display = "block";
+        const hasActive = competitions.length > 0;
+        addBtn.disabled = hasActive;
+        addBtn.textContent = hasActive
+          ? "Aktiv konkurranse eksisterer"
+          : "Legg til konkurranse";
+      } else {
+        addBtn.style.display = "none";
+      }
     }
 
     competitionsList.innerHTML = competitions.length
