@@ -47,7 +47,7 @@ StikkUt er en moderne webapplikasjon for turregistrering, konkurranser og lotter
 
 ---
 
-## 🗄️ Database og pgAdmin
+##Database og pgAdmin
 
 - **pgAdmin** er forhåndskonfigurert via `pgadmin-servers.json`. Når du åpner pgAdmin i nettleseren, vil du se serveren "ShtikkUt Database" ferdig satt opp.
 - **Innlogging pgAdmin:**
@@ -62,7 +62,7 @@ StikkUt er en moderne webapplikasjon for turregistrering, konkurranser og lotter
 
 ---
 
-## Stoppe tjenester
+##Stoppe tjenester
 
 For å stoppe alle tjenester, kjør:
 
@@ -72,7 +72,7 @@ docker compose down
 
 ---
 
-## Gi admin-rettigheter til en bruker
+##Gi admin-rettigheter til en bruker
 
 1. Åpne pgAdmin på [http://localhost:8080](http://localhost:8080)
 2. Koble til databasen `ShtikkUtApp`
@@ -86,7 +86,7 @@ docker compose down
 
 ---
 
-## Teknisk informasjon
+##Teknisk informasjon
 
 - **Backend:** Node.js, Express, JWT (autentisering), bcrypt (passordhashing)
 - **Database:** PostgreSQL
@@ -96,7 +96,7 @@ docker compose down
 
 ---
 
-## Merknader
+##Merknader
 
 - Dette oppsettet er ment for lokal utvikling og testing.
 - For produksjon anbefales det å bruke egne miljøvariabler og sikre passord.
